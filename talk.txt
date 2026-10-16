@@ -24,11 +24,27 @@ problems this may solve:
 4. invalid data prevention
 5. quick view of whats available
 
+stakeholders:
+1. guest
+2. receptionist - provides the rooms and stuff
+3. hotel admin - runs the hotel 
+4. housekeeping and maintenance
+5. payment provider (simulated for this project)
+
+use cases:
+1. add a room to hotel 
+2. register a guest 
+3. search all valid rooms 
+4. book rooms from the given data 
+5. checkout and produce a bill 
+6. pay the bill
+7. view room status 
 
 
-based on the report i will keep 
 
 
+
+based on the report i will keep updating the jorunal
 
 16/10/26
 intial setup , studied oops basics before starting
