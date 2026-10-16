@@ -50,4 +50,5 @@ public abstract class Person {
 -abstract getrole() - every concrete subclass must implement it
 -pilymorphism toString90 calls getRole() , which executes the correct subclass's version
 
+in a new file Scratch.java , tried creating a person object directly but was thrown up an error , "Person is abstract, cannot be instantiated"
 */
