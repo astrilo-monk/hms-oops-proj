@@ -40,12 +40,10 @@ use cases:
 6. pay the bill
 7. view room status 
 
-
-
-
-
 based on the report i will keep updating the jorunal
 
 16/10/26
-intial setup , studied oops basics before starting
-
+-intial setup
+-studied oops basics before starting
+- wrote whatever i think i might solve on journal
+-add Person and Staff classes with room status enums and custom exceptions
