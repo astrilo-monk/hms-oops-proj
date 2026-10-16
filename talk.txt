@@ -1,10 +1,35 @@
-what this project will have
-- Viewing available rooms
-- Registering guests
-- Booking rooms
-- Checking guests out
-- Calculating bills
+i will journal everything with date , like the other projects so if i come back and might be able to udnerstand a little based on the journal and for if someone else uses this code to build something else 
+
+what this project will solve
+1. which rooms exist 
+2. who booked which room with the date 
+3. what each stay costs 
+4. wether the bill had been paid or not 
 
 will use core java , oops and in memory storage not using sql or something else to over complicate it 
 
 will not build an actual frontend that runs unless told , will be terminal gui only 
+
+main objective:
+1. current record of every room - under maintainance, occupied , available
+2. calculate price based on the type of room and the stay duration  
+3. generate an invoice during checkout and accept payment with more than one way of payment if possible 
+4. easy to extend , ex new room types , price updates , etc
+
+
+problems this may solve:
+1. double booking
+2. billing mistakes 
+3. inconsistent pricings 
+4. invalid data prevention
+5. quick view of whats available
+
+
+
+based on the report i will keep 
+
+
+
+16/10/26
+intial setup , studied oops basics before starting
+
