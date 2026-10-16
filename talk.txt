@@ -5,3 +5,6 @@ what this project will have
 - Checking guests out
 - Calculating bills
 
+will use core java , oops and in memory storage not using sql or something else to over complicate it 
+
+will not build an actual frontend that runs unless told , will be terminal gui only 
