@@ -1,0 +1,7 @@
+what this project will have
+- Viewing available rooms
+- Registering guests
+- Booking rooms
+- Checking guests out
+- Calculating bills
+
