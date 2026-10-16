@@ -47,3 +47,4 @@ based on the report i will keep updating the jorunal
 -studied oops basics before starting
 - wrote whatever i think i might solve on journal
 -add Person and Staff classes with room status enums and custom exceptions
+-built a new file Scratch.java to check the abstraction of Person.java and it worked perfectly fine

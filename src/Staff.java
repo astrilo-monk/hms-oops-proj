@@ -25,7 +25,7 @@ public class Staff extends Person {
         return shift;
     }
 
-    public void SetShift(String shift){
+    public void setShift(String shift){
         this.shift= shift;
     }
 
