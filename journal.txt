@@ -48,3 +48,9 @@ based on the report i will keep updating the jorunal
 - wrote whatever i think i might solve on journal
 -add Person and Staff classes with room status enums and custom exceptions
 -built a new file Scratch.java to check the abstraction of Person.java and it worked perfectly fine
+-built the room hieacrchy , room holds everything common to rooms and leaves the questions like what is my type , what do i cost , what do i offer and each subclass answers them
+-ended my day by successfully implementing and compiling the room classes, reviewing java inheritance , constructors and exception handling and organize the project using packages
+
+17/10/26
+-starting with payment , first made a Payment.java abstract class then will implement 3 type of payment using that class
+-implemented all 3 types of payment like cash card and upi , the best thing im proud of is the UPI regex i just implemented , best larp of compiler design,  [A-Za-z0-9._-]+@[A-Za-z]+ , this was built by keeping my own upi id in front, and some other examples it will take A-Z,a-z,0-9,.,_,- then separated by an @ and then usually bank name , so a-z, A-Z , one or more characters
