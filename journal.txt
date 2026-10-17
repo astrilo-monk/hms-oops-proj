@@ -54,3 +54,4 @@ based on the report i will keep updating the jorunal
 17/10/26
 -starting with payment , first made a Payment.java abstract class then will implement 3 type of payment using that class
 -implemented all 3 types of payment like cash card and upi , the best thing im proud of is the UPI regex i just implemented , best larp of compiler design,  [A-Za-z0-9._-]+@[A-Za-z]+ , this was built by keeping my own upi id in front, and some other examples it will take A-Z,a-z,0-9,.,_,- then separated by an @ and then usually bank name , so a-z, A-Z , one or more characters
+-implemented the Booking and Guest classes, added validation and booking status handling
