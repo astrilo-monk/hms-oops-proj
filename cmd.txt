@@ -1,0 +1,2 @@
+to compile all files together-
+javac -d out (Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName })

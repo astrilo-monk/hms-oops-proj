@@ -55,3 +55,9 @@ based on the report i will keep updating the jorunal
 -starting with payment , first made a Payment.java abstract class then will implement 3 type of payment using that class
 -implemented all 3 types of payment like cash card and upi , the best thing im proud of is the UPI regex i just implemented , best larp of compiler design,  [A-Za-z0-9._-]+@[A-Za-z]+ , this was built by keeping my own upi id in front, and some other examples it will take A-Z,a-z,0-9,.,_,- then separated by an @ and then usually bank name , so a-z, A-Z , one or more characters
 -implemented the Booking and Guest classes, added validation and booking status handling
+-implemented the Invoice class, which takes a booking, calculates the subtotal using the room tariff and number of nights, applies 12% GST, and calculates the final bill
+-added a settle() method to connect invoices with the Payment abstraction, allowing different payment types to be used without the invoice needing to know which specific payment method is being used
+- worked on the invoice print method and learned the difference between printf() and println() when formatting monetary values
+-faced compilation errors because i was trying to compile Invoice.java individually while it depended on other classes in different packages; fixed this by compiling all java files together using javac and learned how package structure and classpaths affect compilation
+- reviewed the project structure and considered using BlueJ to visualise class relationships and dependencies
+-next step: implement the main Hotel class to manage rooms, guests, bookings and invoices, then test the complete booking to checkout workflow
