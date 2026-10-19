@@ -61,3 +61,7 @@ based on the report i will keep updating the jorunal
 -faced compilation errors because i was trying to compile Invoice.java individually while it depended on other classes in different packages; fixed this by compiling all java files together using javac and learned how package structure and classpaths affect compilation
 - reviewed the project structure and considered using BlueJ to visualise class relationships and dependencies
 -next step: implement the main Hotel class to manage rooms, guests, bookings and invoices, then test the complete booking to checkout workflow
+
+18/10/26
+-yo i asked my agent to ignore _old_backup directory , and ts dude added himself as a contributor well , not wasting time to remove it as a collaborator
+-spent rest of the day out , couldnt work more,  but did start working on Booking.java and was done till registerGuest() and did cleanedup some code and repo   

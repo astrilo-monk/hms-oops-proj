@@ -174,6 +174,12 @@ Invoice.java:65: error: no suitable method found for println(String,double)
 10 errors
 
 
-sum spelling errors , fixed , used println instead of printf to print multiple values 
+sum spelling errors , fixed , used println instead of printf to print multiple values all fixed , compiled perfectly
+
+-the constructor takes a Booking, asks it for the amouth then derives gst and the total , all amounts are final since an invoice is a record and must not change
+-settle(Payment p) accepts the abstract type cash, card and upi all work, and any future mode will too
+-it compares the amout with a tolerance (Math.abs(a-b)>0.0)  never with == because decimal values such as 0.1 cannot be stored exactly in binary floating point, so two numbers that look equal can differ in last bits
+-orint() uses printf format becauese im using %10.2f , saw this recently vibecoding , this means make place for 10 digits then start entering
+like | | | | | | 6 0 0 0 ,| are where other numbers would have went , ts can be -ve aswell, 6 0 0 0 | | | | | | output would be like this then
 
 */
