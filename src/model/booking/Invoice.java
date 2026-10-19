@@ -61,7 +61,7 @@ public class Invoice {
         System.out.printf("Room : %d (%s) %n",booking.getRoom().getRoomNumber(),booking.getRoom().getType());
         System.out.printf("Stay: %s to %s (%d nights)%n",booking.getCheckIn(),booking.getCheckOut(),booking.getNights());
         System.out.printf("Subtotal: Rs.%10.2f%n",subtotal);
-        System.out.printf("GST 12%: Rs.%10.2f%n",gst);
+        System.out.printf("GST 12%%: Rs.%10.2f%n",gst);
         System.out.printf("Total: Rs%10.2f%n",total);
     }
 }

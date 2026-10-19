@@ -37,7 +37,7 @@ public abstract class Payment {
     public abstract String getMode();
 
     public String getReceipt(){
-        return String.format("%s | %s | Rs.%.2f | %s ", paymentId, getMode(),amount,successful? "SUCCESS" : "FAULED"); //again using "" + amount + "" made is messier so used it also eliminated an if-else block by using ternary operator
+        return String.format("%s | %s | Rs.%.2f | %s ", paymentId, getMode(),amount,successful? "SUCCESS" : "FAILED"); //again using "" + amount + "" made is messier so used it also eliminated an if-else block by using ternary operator
     }
 }
 

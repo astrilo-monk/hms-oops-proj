@@ -65,3 +65,37 @@ based on the report i will keep updating the jorunal
 18/10/26
 -yo i asked my agent to ignore _old_backup directory , and ts dude added himself as a contributor well , not wasting time to remove it as a collaborator
 -completed booking.java which is the actual room booking and hotelmanagement section , worked on it and tried to use new things which i never did , maybe this project was best not vibecoded
+
+19/10/26
+-i might use ai to to add web frontend if needed
+-created hotelApp.java to test the complete hotel workflow
+-tested polymorphism, room booking, exception handling, invoicing and payments
+-error error error 
+***Subtotal: Rs.   6000.00
+Exception in thread "main" java.util.UnknownFormatConversionException: Conversion = ':'
+        at java.base/java.util.Formatter.parse(Formatter.java:2818)
+        at java.base/java.util.Formatter.format(Formatter.java:2744)
+        at java.base/java.io.PrintStream.format(PrintStream.java:1163)
+        at java.base/java.io.PrintStream.printf(PrintStream.java:1061)
+        at model.booking.Invoice.print(Invoice.java:64)
+        at app.HotelApp.main(HotelApp.java:115)***
+problem 1- wrote "("GST 12%: Rs.%10.2f%n",gst);" that "12%" cause it , it needs to be "12%%" to print the %-age symbol this was at Invoice.java
+rerunning after compiling
+new problem. 
+***[6] Aarav checks out and pays by UPI
+--------------------------------------------------
+INVOICE INV9001 (BookingBK1001)
+--------------------------------------------------
+Guest: Aarav Sen 
+Room : 101 (Standard) 
+Stay: 2026-11-10 to 2026-11-13 (3 nights)
+Subtotal: Rs.   6000.00
+GST 12%: Rs.    720.00
+Total: Rs   6720.00
+ PAY5001 | UPIaarav@okbank | Rs.6720.00 | FAULED *** 
+
+the upi payment failed for some reason well would be easy to find as it FAULED
+fount it at UpiPayment.java - "if(upiId != null && upiId.matches("[A-Za-z0-9._-]+@[A-Za=z]+"))" the regext , last [A-Za=z] it should be [A-Za-z]
+alr the output now looks aight 
+- verified room status, occupancy and guest checkout
+-used the output to check whether the implemented classes work together correctly

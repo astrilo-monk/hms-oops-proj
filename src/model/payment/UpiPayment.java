@@ -10,7 +10,7 @@ public class UpiPayment extends Payment{
 
     @Override 
     public boolean processPayment(){
-        if(upiId != null && upiId.matches("[A-Za-z0-9._-]+@[A-Za=z]+")){
+        if(upiId != null && upiId.matches("[A-Za-z0-9._-]+@[A-Za-z]+")){
             markSuccessful();
             return true;
         }
