@@ -6,6 +6,9 @@ public abstract class Room {
     private final double baseRate;
     private RoomStatus status;
 
+    private String maintenanceIssue;
+    private String reportedBy;
+
     protected Room(int roomNumber, int floor , double baseRate){
         if(baseRate<=0){
             throw new IllegalArgumentException("Base rate must be positive!");
@@ -51,15 +54,40 @@ public abstract class Room {
     }
 
     public void sendToMaintenance(){
+        sendToMaintenance("Unspecified problem","system");
+    }
+
+    public void sendToMaintenance(String issue,String reportedBy){
         if(status == RoomStatus.OCCUPIED){
-            throw new IllegalStateException("Room "+roomNumber+"is not occupied");
+            throw new IllegalStateException("Cannot service an occupied room");
         }
+        if(status == RoomStatus.UNDER_MAINTENANCE){
+            throw new IllegalStateException("Room"+roomNumber+" is already under maintenance"+maintenanceIssue);
+        }
+
+        if(issue == null || issue.trim().isEmpty()){
+            throw new IllegalArgumentException("Please desribe the problem");
+        }
+
         status = RoomStatus.UNDER_MAINTENANCE;
+        this.maintenanceIssue = issue.trim();
+        this.reportedBy=reportedBy;
     }
 
     public void completeMaintenance(){
-        if(status == RoomStatus.UNDER_MAINTENANCE)
+        if(status == RoomStatus.UNDER_MAINTENANCE){
             status = RoomStatus.AVAILABLE;
+            maintenanceIssue = null;
+            reportedBy = null;
+        }
+    }
+
+    public String getMaintenIssue(){
+        return maintenanceIssue;
+    }
+
+    public String getReportedBy(){
+        return reportedBy;
     }
 
     protected void validateNights(int nights){
@@ -85,4 +113,10 @@ public abstract class Room {
 -validateNights() is protected so subclasses can reuse shared validation
 -three abstract methods let subclasses define room type,tariff and amenities
 -toString() uses String.format() for readable output , gettype90 resolves to the subclasse's implementation
+*/
+
+/*checkpoint2= 
+sendToMaintenance() now has two forms the old no arguement form still works and delegates to the new one that is overloading and this means nothing that called the old methods breaks
+-the new form checks 3 illegal cases before changing anything , the room is occupied, the room is alread under maintenance or the description is blank
+-completeMaintenance() clears the issue reported so a repaired room carries no stale text
 */

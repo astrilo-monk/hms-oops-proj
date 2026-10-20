@@ -3,6 +3,7 @@ package service;
 import exception.RoomNotAvailableException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import model.booking.Booking;
 import model.booking.Invoice;
@@ -108,5 +109,58 @@ public class Hotel {
         for(Room r: rooms){
             System.out.println(" " + r);
         }
+    }
+
+    public List<Room> getRooms(){
+        return Collections.unmodifiableList(rooms);
+    }
+
+    public List<Booking> getBookings(){
+        return Collections.unmodifiableList(bookings);
+    }
+
+    public Guest registerNewGuest(String name , String phone, String email, String idProof){
+        String id= String.format("G%03d" , guests.size()+1);
+        Guest guest = new Guest(id, name, phone , email, idProof);
+        guests.add(guest);
+        return guest;
+    }
+
+    public Guest findGuest(String guestId){
+        for(Guest g: guests){
+            if(g.getId().equalsIgnoreCase(guestId)){
+                return g;
+            }
+        }
+        throw new IllegalArgumentException("No such guest:" +guestId);
+    }
+
+    public void reportMaintenance(int roomNumber, String issue, Staff reporter){
+        String role = reporter.getDesignation();
+        if(!role.equals("Receptionist") && !role.equals("Manager")){
+            throw new IllegalArgumentException("Only a receptionist or manager can report a problem");
+        }
+        findRoom(roomNumber).sendToMaintenance(issue, reporter.getName() + "(" + role+ ")");
+    }
+
+    public List<Room> getRoomsUnderMaintenance(){
+        List<Room> result = new ArrayList<>();
+        for (Room r: rooms){
+            if (r.getStatus() == RoomStatus.UNDER_MAINTENANCE){
+                result.add(r);
+            }
+        }
+        return result;
+    }
+
+    public void markFixed(int roomNumber, Staff worked){
+        if(!worked.getDesignation().equals("Maintenance")){
+            throw new IllegalArgumentException("Only maintenance staff can mark a room as fixed");
+        }
+        Room room = findRoom(roomNumber);
+        if(room.getStatus() != RoomStatus.UNDER_MAINTENANCE){
+            throw new IllegalStateException("Room "+ roomNumber +"is not under maintenance");
+        }
+        room.completeMaintenance();
     }
 }

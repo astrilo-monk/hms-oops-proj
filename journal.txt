@@ -99,3 +99,19 @@ fount it at UpiPayment.java - "if(upiId != null && upiId.matches("[A-Za-z0-9._-]
 alr the output now looks aight 
 - verified room status, occupancy and guest checkout
 -used the output to check whether the implemented classes work together correctly
+
+
+NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
+
+-added actual maintenance by making it mandatory to give a message of what needs fixing 
+
+10/10/26
+-starting checkpoint two , role based login
+-created the ui package and started working on RoleMenu.java , trying to make one common menu system which different roles can inherit instead of writing the same menu loop again and again
+-worked on CustomerMenu.java , customer should be able to see available rooms and prices , book a room , check their own bookings and checkout and pay
+-made sure the customer cant just enter someone else's booking id and checkout their room , added a check to compare the guest linked to the booking with the currently logged in guest
+- customer booking currently uses LocalDate.now() as checkin and calculates checkout based on the number of nights , keeping it simple instead of asking for both dates
+-ran into compilation issues because i was compiling files from src and src/ui instead of the project root , java couldn't find packages like model , service and exception , learned that the compile command depends on where the terminal is currently located
+- also got a syntax error about a missing closing brace while writing CustomerMenu.java , checked the end of the class and made sure both the method and class are closed properly
+-checkpoint two is still in progress , CustomerMenu.java depends on RoleMenu.java and the rest of the project so need to compile everything together and test the actual menu
+- next step , finish the remaining role menus and HotelConsole.java so the role based login can actually run
