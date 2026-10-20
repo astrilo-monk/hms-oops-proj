@@ -114,4 +114,5 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -ran into compilation issues because i was compiling files from src and src/ui instead of the project root , java couldn't find packages like model , service and exception , learned that the compile command depends on where the terminal is currently located
 - also got a syntax error about a missing closing brace while writing CustomerMenu.java , checked the end of the class and made sure both the method and class are closed properly
 -checkpoint two is still in progress , CustomerMenu.java depends on RoleMenu.java and the rest of the project so need to compile everything together and test the actual menu
-- next step , finish the remaining role menus and HotelConsole.java so the role based login can actually run
+- next step , finish the remaining role menus and HotelConsole.java so the role based login can actually run-
+-used ai to complete CuistomerMenu.java
