@@ -133,3 +133,20 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -built the frontend with npm run build successfully
 -important note: ai was used for the web ui, api connection, debugging and comparison, but i checked the output, ran the tests/builds and kept the original core java model instead of replacing it
 -current status: core java implementation and normal web ui are working, optional role based login/tgui and file storage are still not completed
+
+21/10/26
+-after going back through the pdf properly i realized the role based console and csv storage were extension sections but i decided to complete them too so the codebase now covers all the implementation listings
+-used ai to complete the role based console menus from listing 5.20 to 5.26: RoleMenu, StaffMenu, CustomerMenu, ReceptionistMenu, ManagerMenu, MaintenanceMenu and HotelConsole
+-the console now supports customer, receptionist, manager and maintenance roles, each with different actions and menus
+-customer can see available rooms, book a room, view their own bookings and checkout with payment
+-receptionist can register guests, book for guests, checkout guests, report maintenance and see all bookings
+-manager can see occupancy, add rooms, report maintenance and view rooms under maintenance
+-maintenance staff can see reported problems and mark rooms as fixed
+-used ai to implement DataStore from listing 5.28 with csv saving and loading for rooms, guests and bookings
+-added safe temporary file replacement while saving so a half written csv does not replace the previous complete file
+-added autosave after menu actions and made HotelConsole load saved data on startup or create sample data on the first run
+-tested that a booking survives closing and starting the program again, and checked that the csv files are created correctly
+-also tested a maintenance issue containing a comma so the csv quoting and loading logic does not break
+-used ai for the implementation but checked the pdf listing requirements, compiled all java files, ran the console workflow and verified the persistence manually
+-committed everything with commit 5234814 - feat: complete role menus and csv persistence
+-frontend still builds successfully and the original core HotelApp workflow still compiles and runs
