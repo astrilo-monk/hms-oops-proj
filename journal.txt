@@ -170,3 +170,10 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -added java api staff storage with duplicate id and positive salary validation, plus a staff listing endpoint
 -used ai for the implementation and tested the hiring endpoint with a sample employee
 -frontend build and java compilation both passed
+
+21/10/26
+-the web api was resetting Aarav's booking every time it restarted, so i connected the web api to the existing DataStore csv persistence
+-the api now loads rooms, guests and bookings from the data folder on startup and only creates demo data on the first run
+-web changes now save automatically after registering guests, creating bookings, reporting or fixing maintenance, checking out, and hiring staff
+-tested checking out Aarav Sen, confirmed the dashboard showed 0 occupied, restarted the java api, and confirmed it still showed 0 occupied with the booking status COMPLETED
+-used ai for the persistence integration and verified the java compilation and api restart behavior

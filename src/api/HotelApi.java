@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -25,10 +27,12 @@ import model.room.RoomStatus;
 import model.room.StandardRoom;
 import model.room.SuiteRoom;
 import service.Hotel;
+import storage.DataStore;
 
 /** Small JDK-only HTTP API for the existing in-memory hotel domain model. */
 public class HotelApi {
-    private static final Hotel hotel = new Hotel("Grand Orchid Hotel");
+    private static Hotel hotel = new Hotel("Grand Orchid Hotel");
+    private static final DataStore store = new DataStore("data");
     private static final Map<String, Invoice> invoices = new ConcurrentHashMap<>();
     private static final Map<String, Guest> guests = new ConcurrentHashMap<>();
     private static final Map<String, Staff> staffMembers = new ConcurrentHashMap<>();
@@ -36,12 +40,40 @@ public class HotelApi {
     private static final Staff maintenanceDesk = new Staff("S003", "Biswajit Mondal", "9830077777", "Maintenance", 22000, "Day");
 
     public static void main(String[] args) throws IOException {
-        seed();
+        initialiseData();
         HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 8080), 0);
         server.createContext("/api/", HotelApi::handle);
         server.setExecutor(java.util.concurrent.Executors.newCachedThreadPool());
         server.start();
         System.out.println("hotel api running at http://127.0.0.1:8080/api");
+    }
+
+    private static void initialiseData() {
+        List<Staff> staff = defaultStaff();
+        if (store.exists()) {
+            hotel = store.load("Grand Orchid Hotel", staff);
+            guests.clear();
+            for (Guest guest : hotel.getGuests()) {
+                guests.put(guest.getId(), guest);
+            }
+            staffMembers.clear();
+            for (Staff member : staff) {
+                staffMembers.put(member.getId(), member);
+            }
+            return;
+        }
+        seed();
+        persist();
+    }
+
+    private static List<Staff> defaultStaff() {
+        Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
+        Staff manager = new Staff("S002", "Anita Basu", "9830088888", "Manager", 42000, "Morning");
+        return new ArrayList<>(List.of(receptionist, manager, maintenanceDesk, onlineDesk));
+    }
+
+    private static void persist() {
+        store.save(hotel);
     }
 
     private static void seed() {
@@ -52,10 +84,11 @@ public class HotelApi {
         hotel.addRoom(new SuiteRoom(301, 3, 8000));
         addGuest("Aarav Sen", "9830012345", "aarav@example.com", "DEMO-1111");
         addGuest("Meera Das", "9830054321", "meera@example.com", "DEMO-2222");
-        Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
-        staffMembers.put(receptionist.getId(), receptionist);
-        staffMembers.put("S002", new Staff("S002", "Anita Basu", "9830088888", "Manager", 42000, "Morning"));
-        staffMembers.put(maintenanceDesk.getId(), maintenanceDesk);
+        List<Staff> staff = defaultStaff();
+        for (Staff member : staff) {
+            staffMembers.put(member.getId(), member);
+        }
+        Staff receptionist = staffMembers.get("S001");
         try {
             hotel.bookRoom(guests.get("G001"), 102, LocalDate.now(), LocalDate.now().plusDays(2), receptionist);
             hotel.reportMaintenance(202, "air conditioner needs inspection", receptionist);
@@ -147,6 +180,7 @@ public class HotelApi {
     private static void createGuest(HttpExchange x) throws IOException {
         String body = body(x);
         Guest g = addGuest(required(body, "name"), required(body, "phone"), required(body, "email"), value(body, "idProof", "not provided"));
+        persist();
         send(x, 201, "{\"id\":" + q(g.getId()) + ",\"name\":" + q(g.getName()) + "}");
     }
 
@@ -171,6 +205,7 @@ public class HotelApi {
                 required(body, "designation"), Double.parseDouble(required(body, "salary")),
                 required(body, "shift"));
         staffMembers.put(id, staff);
+        persist();
         send(x, 201, "{\"id\":" + q(staff.getId()) + ",\"name\":" + q(staff.getName())
                 + ",\"designation\":" + q(staff.getDesignation()) + "}");
     }
@@ -196,6 +231,7 @@ public class HotelApi {
         } catch (RoomNotAvailableException e) {
             throw new IllegalStateException("Room is not available: " + e.getMessage(), e);
 }
+        persist();
         send(x, 201, "{\"id\":" + q(booking.getBookingId()) + ",\"room\":" + room + ",\"guest\":" + q(guest.getName()) + "}");
     }
 
@@ -205,6 +241,7 @@ public class HotelApi {
         String issue = required(body, "issue");
         Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
         hotel.reportMaintenance(room, issue, receptionist);
+        persist();
         send(x, 200, "{\"status\":\"UNDER_MAINTENANCE\"}");
     }
 
@@ -212,12 +249,14 @@ public class HotelApi {
         String body = body(x);
         int room = Integer.parseInt(required(body, "roomNumber"));
         hotel.markFixed(room, maintenanceDesk);
+        persist();
         send(x, 200, "{\"status\":\"AVAILABLE\"}");
     }
 
     private static void checkout(HttpExchange x, String id) throws IOException {
         Invoice invoice = hotel.checkOut(id);
         invoices.put(invoice.getInvoiceId(), invoice);
+        persist();
         send(x, 200, "{\"invoiceId\":" + q(invoice.getInvoiceId()) + ",\"bookingId\":" + q(id)
                 + ",\"subtotal\":" + invoice.getSubtotal() + ",\"gst\":" + invoice.getGst()
                 + ",\"total\":" + invoice.getTotal() + ",\"paid\":false}");
