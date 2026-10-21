@@ -136,13 +136,13 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 
 21/10/26
 -after going back through the pdf properly i realized the role based console and csv storage were extension sections but i decided to complete them too so the codebase now covers all the implementation listings
--used ai to complete the role based console menus from listing 5.20 to 5.26: RoleMenu, StaffMenu, CustomerMenu, ReceptionistMenu, ManagerMenu, MaintenanceMenu and HotelConsole
+-the role based console menus from listing 5.20 to 5.26: RoleMenu, StaffMenu, CustomerMenu, ReceptionistMenu, ManagerMenu, MaintenanceMenu and HotelConsole
 -the console now supports customer, receptionist, manager and maintenance roles, each with different actions and menus
 -customer can see available rooms, book a room, view their own bookings and checkout with payment
 -receptionist can register guests, book for guests, checkout guests, report maintenance and see all bookings
 -manager can see occupancy, add rooms, report maintenance and view rooms under maintenance
 -maintenance staff can see reported problems and mark rooms as fixed
--used ai to implement DataStore from listing 5.28 with csv saving and loading for rooms, guests and bookings
+-implemented DataStore from listing 5.28 with csv saving and loading for rooms, guests and bookings
 -added safe temporary file replacement while saving so a half written csv does not replace the previous complete file
 -added autosave after menu actions and made HotelConsole load saved data on startup or create sample data on the first run
 -tested that a booking survives closing and starting the program again, and checked that the csv files are created correctly
@@ -152,10 +152,8 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -frontend still builds successfully and the original core HotelApp workflow still compiles and runs
 
 21/10/26
--the web app was still locked to Rohit Ghosh and showed every page to every role, so i used ai to add a local role switcher for customer, receptionist, manager and maintenance
--the selected role is saved in localStorage, the profile name and initials update, and the sidebar only shows the pages that make sense for that role
--made the maintenance web page more useful by adding a mark fixed action for the maintenance user
--added the java api endpoint for completing maintenance and connected it to Hotel.markFixed()
--customers now see a customer-focused view and staff-only actions like checkout are hidden from them
--added responsive styling for the role selector and maintenance table so the ui is less broken on smaller screens
--used ai for this implementation but checked the frontend production build and compiled all java files
+-the booking form was only letting me choose the seeded guests, so i used ai to make it possible to book for a completely new guest name
+-added a use a new guest option to the booking form with name, phone, email and optional id proof fields
+-the web app now creates the guest first through the existing api and then uses the new guest id to create the booking
+-customers can now see bookings created for their newly registered guest instead of being limited to Aarav Sen
+-tested the frontend build and compiled the java backend successfully
