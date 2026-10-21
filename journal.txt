@@ -163,3 +163,10 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -selecting it opens the guest registration form, and after saving the new guest becomes the active customer profile with their own name and initials
 -stored the new customer id and name locally so the customer view can show that guest's bookings
 -used ai for the change and verified the frontend production build
+
+21/10/26
+-added a manager-only hire staff action to the web dashboard
+-the manager can enter a staff id, name, phone, designation, salary and shift
+-added java api staff storage with duplicate id and positive salary validation, plus a staff listing endpoint
+-used ai for the implementation and tested the hiring endpoint with a sample employee
+-frontend build and java compilation both passed

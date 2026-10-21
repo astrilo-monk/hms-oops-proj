@@ -31,6 +31,7 @@ public class HotelApi {
     private static final Hotel hotel = new Hotel("Grand Orchid Hotel");
     private static final Map<String, Invoice> invoices = new ConcurrentHashMap<>();
     private static final Map<String, Guest> guests = new ConcurrentHashMap<>();
+    private static final Map<String, Staff> staffMembers = new ConcurrentHashMap<>();
     private static final Staff onlineDesk = new Staff("S000", "Online Desk", "0000000000", "Online Desk", 1, "Always");
     private static final Staff maintenanceDesk = new Staff("S003", "Biswajit Mondal", "9830077777", "Maintenance", 22000, "Day");
 
@@ -52,6 +53,9 @@ public class HotelApi {
         addGuest("Aarav Sen", "9830012345", "aarav@example.com", "DEMO-1111");
         addGuest("Meera Das", "9830054321", "meera@example.com", "DEMO-2222");
         Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
+        staffMembers.put(receptionist.getId(), receptionist);
+        staffMembers.put("S002", new Staff("S002", "Anita Basu", "9830088888", "Manager", 42000, "Morning"));
+        staffMembers.put(maintenanceDesk.getId(), maintenanceDesk);
         try {
             hotel.bookRoom(guests.get("G001"), 102, LocalDate.now(), LocalDate.now().plusDays(2), receptionist);
             hotel.reportMaintenance(202, "air conditioner needs inspection", receptionist);
@@ -77,7 +81,9 @@ public class HotelApi {
             else if (method.equals("GET") && path.equals("/rooms")) rooms(exchange);
             else if (method.equals("GET") && path.equals("/bookings")) bookings(exchange);
             else if (method.equals("GET") && path.equals("/guests")) guestList(exchange);
+            else if (method.equals("GET") && path.equals("/staff")) staffList(exchange);
             else if (method.equals("POST") && path.equals("/guests")) createGuest(exchange);
+            else if (method.equals("POST") && path.equals("/staff")) createStaff(exchange);
             else if (method.equals("POST") && path.equals("/bookings")) createBooking(exchange);
             else if (method.equals("POST") && path.equals("/maintenance")) maintenance(exchange);
             else if (method.equals("POST") && path.equals("/maintenance/fix")) fixMaintenance(exchange);
@@ -142,6 +148,31 @@ public class HotelApi {
         String body = body(x);
         Guest g = addGuest(required(body, "name"), required(body, "phone"), required(body, "email"), value(body, "idProof", "not provided"));
         send(x, 201, "{\"id\":" + q(g.getId()) + ",\"name\":" + q(g.getName()) + "}");
+    }
+
+    private static void staffList(HttpExchange x) throws IOException {
+        StringBuilder b = new StringBuilder("[");
+        boolean first = true;
+        for (Staff staff : staffMembers.values()) {
+            if (!first) b.append(',');
+            first = false;
+            b.append("{\"id\":").append(q(staff.getId())).append(",\"name\":").append(q(staff.getName()))
+             .append(",\"phone\":").append(q(staff.getPhone())).append(",\"designation\":").append(q(staff.getDesignation()))
+             .append(",\"salary\":").append(staff.getSalary()).append(",\"shift\":").append(q(staff.getShift())).append('}');
+        }
+        send(x, 200, b.append(']').toString());
+    }
+
+    private static void createStaff(HttpExchange x) throws IOException {
+        String body = body(x);
+        String id = required(body, "id");
+        if (staffMembers.containsKey(id)) throw new IllegalArgumentException("staff id already exists");
+        Staff staff = new Staff(id, required(body, "name"), required(body, "phone"),
+                required(body, "designation"), Double.parseDouble(required(body, "salary")),
+                required(body, "shift"));
+        staffMembers.put(id, staff);
+        send(x, 201, "{\"id\":" + q(staff.getId()) + ",\"name\":" + q(staff.getName())
+                + ",\"designation\":" + q(staff.getDesignation()) + "}");
     }
 
     private static void createBooking(HttpExchange x) throws IOException {
