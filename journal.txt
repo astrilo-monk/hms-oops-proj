@@ -150,3 +150,12 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -used ai for the implementation but checked the pdf listing requirements, compiled all java files, ran the console workflow and verified the persistence manually
 -committed everything with commit 5234814 - feat: complete role menus and csv persistence
 -frontend still builds successfully and the original core HotelApp workflow still compiles and runs
+
+21/10/26
+-the web app was still locked to Rohit Ghosh and showed every page to every role, so i used ai to add a local role switcher for customer, receptionist, manager and maintenance
+-the selected role is saved in localStorage, the profile name and initials update, and the sidebar only shows the pages that make sense for that role
+-made the maintenance web page more useful by adding a mark fixed action for the maintenance user
+-added the java api endpoint for completing maintenance and connected it to Hotel.markFixed()
+-customers now see a customer-focused view and staff-only actions like checkout are hidden from them
+-added responsive styling for the role selector and maintenance table so the ui is less broken on smaller screens
+-used ai for this implementation but checked the frontend production build and compiled all java files

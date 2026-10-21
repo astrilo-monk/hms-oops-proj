@@ -32,6 +32,7 @@ public class HotelApi {
     private static final Map<String, Invoice> invoices = new ConcurrentHashMap<>();
     private static final Map<String, Guest> guests = new ConcurrentHashMap<>();
     private static final Staff onlineDesk = new Staff("S000", "Online Desk", "0000000000", "Online Desk", 1, "Always");
+    private static final Staff maintenanceDesk = new Staff("S003", "Biswajit Mondal", "9830077777", "Maintenance", 22000, "Day");
 
     public static void main(String[] args) throws IOException {
         seed();
@@ -79,6 +80,7 @@ public class HotelApi {
             else if (method.equals("POST") && path.equals("/guests")) createGuest(exchange);
             else if (method.equals("POST") && path.equals("/bookings")) createBooking(exchange);
             else if (method.equals("POST") && path.equals("/maintenance")) maintenance(exchange);
+            else if (method.equals("POST") && path.equals("/maintenance/fix")) fixMaintenance(exchange);
             else if (method.equals("POST") && path.startsWith("/checkout/")) checkout(exchange, path.substring("/checkout/".length()));
             else if (method.equals("POST") && path.startsWith("/pay/")) pay(exchange, path.substring("/pay/".length()));
             else send(exchange, 404, error("endpoint not found"));
@@ -173,6 +175,13 @@ public class HotelApi {
         Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
         hotel.reportMaintenance(room, issue, receptionist);
         send(x, 200, "{\"status\":\"UNDER_MAINTENANCE\"}");
+    }
+
+    private static void fixMaintenance(HttpExchange x) throws IOException {
+        String body = body(x);
+        int room = Integer.parseInt(required(body, "roomNumber"));
+        hotel.markFixed(room, maintenanceDesk);
+        send(x, 200, "{\"status\":\"AVAILABLE\"}");
     }
 
     private static void checkout(HttpExchange x, String id) throws IOException {
