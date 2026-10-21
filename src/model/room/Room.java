@@ -86,6 +86,10 @@ public abstract class Room {
         return maintenanceIssue;
     }
 
+    public String getMaintenanceIssue(){
+        return maintenanceIssue;
+    }
+
     public String getReportedBy(){
         return reportedBy;
     }

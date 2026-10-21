@@ -119,6 +119,10 @@ public class Hotel {
         return Collections.unmodifiableList(bookings);
     }
 
+    public List<Guest> getGuests(){
+        return Collections.unmodifiableList(guests);
+    }
+
     public Guest registerNewGuest(String name , String phone, String email, String idProof){
         String id= String.format("G%03d" , guests.size()+1);
         Guest guest = new Guest(id, name, phone , email, idProof);
@@ -133,6 +137,33 @@ public class Hotel {
             }
         }
         throw new IllegalArgumentException("No such guest:" +guestId);
+    }
+
+    public void restoreBooking(Booking booking) {
+        if (booking == null) {
+            throw new IllegalArgumentException("Booking is required");
+        }
+        if (findBookingIfPresent(booking.getBookingId()) != null) {
+            throw new IllegalArgumentException("Duplicate booking id: " + booking.getBookingId());
+        }
+        if (!guests.contains(booking.getGuest())) {
+            throw new IllegalArgumentException("Booking guest is not registered");
+        }
+        Room room = findRoom(booking.getRoom().getRoomNumber());
+        if (room != booking.getRoom()) {
+            throw new IllegalArgumentException("Booking room does not belong to this hotel");
+        }
+        booking.getGuest().addBooking(booking);
+        bookings.add(booking);
+    }
+
+    private Booking findBookingIfPresent(String bookingId) {
+        for (Booking booking : bookings) {
+            if (booking.getBookingId().equals(bookingId)) {
+                return booking;
+            }
+        }
+        return null;
     }
 
     public void reportMaintenance(int roomNumber, String issue, Staff reporter){

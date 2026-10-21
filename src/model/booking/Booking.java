@@ -33,6 +33,35 @@ public class Booking {
         this.status= BookingStatus.CONFIRMED;
     }
 
+    public Booking(String bookingId, Guest guest, Room room, LocalDate checkIn,
+                   LocalDate checkOut, Staff handledBy, BookingStatus status){
+        if (bookingId == null || bookingId.trim().isEmpty() || guest == null
+                || room == null || handledBy == null || status == null) {
+            throw new IllegalArgumentException("Saved booking data is incomplete");
+        }
+        if (!checkOut.isAfter(checkIn)) {
+            throw new IllegalArgumentException("Checkout must be after checkin");
+        }
+        this.bookingId = bookingId;
+        this.guest = guest;
+        this.room = room;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.handledBy = handledBy;
+        this.status = status;
+        updateCounter(bookingId);
+    }
+
+    private static void updateCounter(String id) {
+        if (id.startsWith("BK")) {
+            try {
+                counter = Math.max(counter, Integer.parseInt(id.substring(2)) + 1);
+            } catch (NumberFormatException ignored) {
+                // Preserve the current counter for malformed legacy ids.
+            }
+        }
+    }
+
     public String getBookingId(){
         return bookingId;
     }
