@@ -1,2 +1,8 @@
 to compile all files together-
 javac -d out (Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName })
+
+run frontend: 
+powershell -ExecutionPolicy Bypass -File .\scripts\run-frontend.ps1
+
+run backend:
+powershell -ExecutionPolicy Bypass -File .\scripts\run-api.ps1
