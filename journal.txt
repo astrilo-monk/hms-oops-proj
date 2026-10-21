@@ -157,3 +157,9 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -the web app now creates the guest first through the existing api and then uses the new guest id to create the booking
 -customers can now see bookings created for their newly registered guest instead of being limited to Aarav Sen
 -tested the frontend build and compiled the java backend successfully
+
+21/10/26
+-added a visible + new guest option directly inside the frontend role dropdown
+-selecting it opens the guest registration form, and after saving the new guest becomes the active customer profile with their own name and initials
+-stored the new customer id and name locally so the customer view can show that guest's bookings
+-used ai for the change and verified the frontend production build
