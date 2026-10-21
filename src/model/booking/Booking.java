@@ -81,7 +81,7 @@ public class Booking {
         if(status !=BookingStatus.CONFIRMED){
             throw  new IllegalStateException("Booking is already"+status);
         }
-        status = BookingStatus.CANCELED;
+        status = BookingStatus.CANCELLED;
         room.vacate();
     }
 
@@ -90,4 +90,3 @@ public class Booking {
         return String.format("%s | %s | Room %d | %s to %s | %d night(s) | %s", bookingId, guest.getName(), room.getRoomNumber(),checkIn,checkOut,getNights(),status);
     }
 }
-

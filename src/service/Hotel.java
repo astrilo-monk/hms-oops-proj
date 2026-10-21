@@ -102,7 +102,7 @@ public class Hotel {
                 occupied++;
             }
         }
-        return rooms.isEmpty() ? 0 : occupied * 100/rooms.size();
+        return rooms.isEmpty() ? 0 : occupied * 100.0 / rooms.size();
     }
 
     public void printRoomStatus(){

@@ -38,7 +38,7 @@ public abstract class Person {
 
     @Override 
     public String toString(){
-        return getRole() + " ["+ id + "}" + name; 
+        return getRole() + " [" + id + "] " + name;
         
         /*custom text representation of a Person object ,
         ex: id = "101", name="farhan", desig = "owner" 

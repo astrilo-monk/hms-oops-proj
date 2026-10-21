@@ -103,7 +103,8 @@ public abstract class Room {
 
     @Override 
     public String toString(){
-        return String.format("Room %d (%s, floor %d)", roomNumber,getType(),floor,baseRate,status); //wrote like this jus to be less messy
+        return String.format("Room %d (%s, floor %d) Rs.%.2f/night [%s]",
+                roomNumber, getType(), floor, baseRate, status);
     }
 }
 

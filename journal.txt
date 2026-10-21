@@ -105,7 +105,7 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 
 -added actual maintenance by making it mandatory to give a message of what needs fixing 
 
-10/10/26
+20/10/26
 -starting checkpoint two , role based login
 -created the ui package and started working on RoleMenu.java , trying to make one common menu system which different roles can inherit instead of writing the same menu loop again and again
 -worked on CustomerMenu.java , customer should be able to see available rooms and prices , book a room , check their own bookings and checkout and pay
@@ -116,3 +116,20 @@ NOW CHECKPOINT TWO STARTING, STARTING WITH ROLE BASED LOGIN:
 -checkpoint two is still in progress , CustomerMenu.java depends on RoleMenu.java and the rest of the project so need to compile everything together and test the actual menu
 - next step , finish the remaining role menus and HotelConsole.java so the role based login can actually run-
 -used ai to complete CuistomerMenu.java
+
+21/10/26
+-alr so coding the tgui is a pain in ass, im gonna vibecode the frotnend first and keep it completely different from the src/(backend files) and connect it through an api layer, easiest way , or i need to type like 1k loc to fining only 50% of ui stuff, thats too much work , so yea vibecode and connected it via an api layer
+-used ai to generate the initial normal web ui with React and Vite instead of continuing with the terminal gui section
+- created the Java HTTP api layer which connects the frontend to the existing Hotel, Room, Guest, Booking, Invoice and Payment classes
+-the frontend has pages for overview, rooms, bookings, guests, billing and maintenance, and it can create guests, create bookings, report maintenance and checkout bookings
+-ran into a backend unavailable problem even though the java api was running, found out it was a cors issue because the frontend was opened on 127.0.0.1 while the api only allowed localhost
+-used ai to debug the cors problem and changed the api to safely allow both localhost:5173 and 127.0.0.1:5173
+-checked the api endpoints manually and dashboard, rooms, bookings, guests and health all returned successfully
+-used ai to compare the project against the pdf until the ui section, while leaving the optional role based console and tgui section unfinished as planned
+-found and fixed some actual issues during the comparison: occupancy percentage was using integer division, Room.toString() was not printing the expected information, Person.toString() had a wrong bracket, and the web modal cancel button was using history.back()
+-also fixed the frontend phone validation so it matches the java backend requirement of exactly 10 digits
+-renamed CANCELED to CANCELLED to match the status spelling used in the pdf
+-compiled all java files successfully and ran HotelApp again, the booking, double booking rejection, invalid date rejection, checkout, gst and payment demonstrations all worked
+-built the frontend with npm run build successfully
+-important note: ai was used for the web ui, api connection, debugging and comparison, but i checked the output, ran the tests/builds and kept the original core java model instead of replacing it
+-current status: core java implementation and normal web ui are working, optional role based login/tgui and file storage are still not completed
