@@ -49,7 +49,7 @@ public class HotelApi {
     }
 
     private static void initialiseData() {
-        List<Staff> staff = defaultStaff();
+        List<Staff> staff = store.loadStaff(defaultStaff());
         if (store.exists()) {
             hotel = store.load("Grand Orchid Hotel", staff);
             guests.clear();
@@ -73,7 +73,7 @@ public class HotelApi {
     }
 
     private static void persist() {
-        store.save(hotel);
+        store.save(hotel, new ArrayList<>(staffMembers.values()));
     }
 
     private static void seed() {
@@ -84,7 +84,7 @@ public class HotelApi {
         hotel.addRoom(new SuiteRoom(301, 3, 8000));
         addGuest("Aarav Sen", "9830012345", "aarav@example.com", "DEMO-1111");
         addGuest("Meera Das", "9830054321", "meera@example.com", "DEMO-2222");
-        List<Staff> staff = defaultStaff();
+        List<Staff> staff = store.loadStaff(defaultStaff());
         for (Staff member : staff) {
             staffMembers.put(member.getId(), member);
         }
@@ -162,7 +162,7 @@ public class HotelApi {
              .append(",\"guestId\":").append(q(v.getGuest().getId())).append(",\"room\":").append(v.getRoom().getRoomNumber())
              .append(",\"type\":").append(q(v.getRoom().getType())).append(",\"checkIn\":").append(q(v.getCheckIn().toString()))
              .append(",\"checkOut\":").append(q(v.getCheckOut().toString())).append(",\"nights\":").append(v.getNights())
-             .append(",\"amount\":").append(v.calculateAmount() * 1.12).append(",\"status\":").append(q(v.getStatus().name())).append('}');
+             .append(",\"amount\":").append(v.calculateAmount() * (1 + Invoice.GST_RATE)).append(",\"status\":").append(q(v.getStatus().name())).append('}');
         }
         send(x, 200, b.append(']').toString());
     }
@@ -218,7 +218,8 @@ public class HotelApi {
         if (nights < 1 || nights > 365) throw new IllegalArgumentException("nights must be between 1 and 365");
         Guest guest = guests.get(guestId);
         if (guest == null) throw new IllegalArgumentException("unknown guest id");
-        Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
+        String staffId = value(body, "staffId", "S001");
+        Staff handler = staffMembers.getOrDefault(staffId, onlineDesk);
         Booking booking;
         try {
             booking = hotel.bookRoom(
@@ -226,7 +227,7 @@ public class HotelApi {
                 room,
                 LocalDate.now(),
                 LocalDate.now().plusDays(nights),
-                receptionist
+                handler
             );
         } catch (RoomNotAvailableException e) {
             throw new IllegalStateException("Room is not available: " + e.getMessage(), e);
@@ -239,8 +240,9 @@ public class HotelApi {
         String body = body(x);
         int room = Integer.parseInt(required(body, "roomNumber"));
         String issue = required(body, "issue");
-        Staff receptionist = new Staff("S001", "Rohit Ghosh", "9830099999", "Receptionist", 28000, "Morning");
-        hotel.reportMaintenance(room, issue, receptionist);
+        String staffId = value(body, "staffId", "S001");
+        Staff reporter = staffMembers.getOrDefault(staffId, staffMembers.get("S001"));
+        hotel.reportMaintenance(room, issue, reporter);
         persist();
         send(x, 200, "{\"status\":\"UNDER_MAINTENANCE\"}");
     }
@@ -274,7 +276,12 @@ public class HotelApi {
             default: throw new IllegalArgumentException("mode must be cash, card or upi");
         }
         boolean ok = invoice.settle(payment);
-        send(x, ok ? 200 : 400, "{\"success\":" + ok + ",\"receipt\":" + q(payment.getReceipt()) + ",\"paid\":" + invoice.isPaid() + "}");
+        if (!ok) {
+            send(x, 400, "{\"success\":false,\"error\":\"payment rejected; check the payment details\",\"receipt\":"
+                    + q(payment.getReceipt()) + ",\"paid\":false}");
+            return;
+        }
+        send(x, 200, "{\"success\":true,\"receipt\":" + q(payment.getReceipt()) + ",\"paid\":true}");
     }
 
     private static String body(HttpExchange x) throws IOException {

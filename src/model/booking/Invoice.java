@@ -37,11 +37,14 @@ public class Invoice {
         return total;
     }
 
-    public boolean isPaid(){
+    public synchronized boolean isPaid(){
         return payment != null && payment.isSuccessful();
     }
 
-    public boolean settle(Payment p){ //workds with any Payment subclass, invoice never asks which one it is
+    public synchronized boolean settle(Payment p){
+        if(isPaid()){
+            throw new IllegalStateException("Invoice is already paid");
+        }
         if(Math.abs(p.getAmount()-total)>0.01){
             throw new IllegalArgumentException("Payment amount dont match invoice total");
         }

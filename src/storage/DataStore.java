@@ -33,11 +33,16 @@ public class DataStore {
     }
 
     public void save(Hotel hotel) {
+        save(hotel, null);
+    }
+
+    public void save(Hotel hotel, List<Staff> staff) {
         try {
             Files.createDirectories(folder);
             writeFile("rooms.csv", roomLines(hotel));
             writeFile("guests.csv", guestLines(hotel));
             writeFile("bookings.csv", bookingLines(hotel));
+            if (staff != null) { writeFile("staff.csv", staffLines(staff)); }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -77,14 +82,34 @@ public class DataStore {
         return lines;
     }
 
+    private List<String> staffLines(List<Staff> staff) {
+        List<String> lines = new ArrayList<>();
+        lines.add("id,name,phone,designation,salary,shift");
+        for (Staff m : staff) { lines.add(row(m.getId(), m.getName(), m.getPhone(), m.getDesignation(), String.valueOf(m.getSalary()), m.getShift())); }
+        return lines;
+    }
+
     private void writeFile(String name, List<String> lines) throws IOException {
         Path temp = folder.resolve(name + ".tmp");
         Files.write(temp, lines, StandardCharsets.UTF_8);
         Files.move(temp, folder.resolve(name), StandardCopyOption.REPLACE_EXISTING);
     }
 
+    public List<Staff> loadStaff(List<Staff> defaults) {
+        List<Staff> res = new ArrayList<>(defaults);
+        if (!Files.exists(folder.resolve("staff.csv"))) return res;
+        try {
+            for (List<String> f : readRows("staff.csv")) {
+                String id = f.get(0); res.removeIf(s -> s.getId().equals(id));
+                res.add(new Staff(id, f.get(1), f.get(2), f.get(3), Double.parseDouble(f.get(4)), f.get(5)));
+            }
+            return res;
+        } catch (IOException e) { throw new UncheckedIOException(e); }
+    }
+
     public Hotel load(String hotelName, List<Staff> staff) {
         try {
+            List<Staff> allStaff = loadStaff(staff);
             Hotel hotel = new Hotel(hotelName);
             for (List<String> fields : readRows("rooms.csv")) {
                 hotel.addRoom(buildRoom(fields));
@@ -97,7 +122,7 @@ public class DataStore {
                 hotel.restoreBooking(new Booking(fields.get(0), hotel.findGuest(fields.get(1)),
                         hotel.findRoom(Integer.parseInt(fields.get(2))),
                         LocalDate.parse(fields.get(3)), LocalDate.parse(fields.get(4)),
-                        findStaff(staff, fields.get(5)),
+                        findStaff(allStaff, fields.get(5)),
                         BookingStatus.valueOf(fields.get(6))));
             }
             return hotel;
